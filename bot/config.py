@@ -1,0 +1,19 @@
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env.bot.secret
+load_dotenv(".env.bot.secret")
+
+class Config:
+    BOT_TOKEN = os.getenv("BOT_TOKEN")
+    LMS_API_URL = os.getenv("LMS_API_URL")
+    LMS_API_KEY = os.getenv("LMS_API_KEY")
+    LLM_API_KEY = os.getenv("LLM_API_KEY")
+
+    @staticmethod
+    def validate():
+        """Raise an error if required vars are missing (only for production)."""
+        required = ["LMS_API_URL", "LMS_API_KEY"]
+        for var in required:
+            if not getattr(Config, var):
+                raise ValueError(f"Missing required environment variable: {var}")
