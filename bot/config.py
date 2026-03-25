@@ -9,6 +9,8 @@ class Config:
     LMS_API_URL = os.getenv("LMS_API_URL")
     LMS_API_KEY = os.getenv("LMS_API_KEY")
     LLM_API_KEY = os.getenv("LLM_API_KEY")
+    LLM_API_BASE_URL = os.getenv("LLM_API_BASE_URL", "http://localhost:42005/v1")
+    LLM_API_MODEL = os.getenv("LLM_API_MODEL", "qwen-coder")
 
     @staticmethod
     def validate():
