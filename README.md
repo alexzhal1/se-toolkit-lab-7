@@ -7,28 +7,25 @@
 > Build a Telegram bot that lets users interact with the LMS backend through chat. Users should be able to check system health, browse labs and scores, and ask questions in plain language. The bot should use an LLM to understand what the user wants and fetch the right data. Deploy it alongside the existing backend on the VM.
 
 This is what a customer might tell you. Your job is to turn it into a working product using an AI coding agent (Qwen Code) as your development partner.
-
-```
 ┌──────────────────────────────────────────────────────────────┐
-│                                                              │
-│  ┌──────────────┐     ┌──────────────────────────────────┐   │
-│  │  Telegram    │────▶│  Your Bot                        │   │
-│  │  User        │◀────│  (aiogram / python-telegram-bot) │   │
-│  └──────────────┘     └──────┬───────────────────────────┘   │
-│                              │                               │
-│                              │ slash commands + plain text    │
-│                              ├───────▶ /start, /help         │
-│                              ├───────▶ /health, /labs        │
-│                              ├───────▶ intent router ──▶ LLM │
-│                              │                    │          │
-│                              │                    ▼          │
-│  ┌──────────────┐     ┌──────┴───────┐    tools/actions      │
-│  │  Docker      │     │  LMS Backend │◀───── GET /items      │
-│  │  Compose     │     │  (FastAPI)   │◀───── GET /analytics  │
-│  │              │     │  + PostgreSQL│◀───── POST /sync      │
-│  └──────────────┘     └──────────────┘                       │
+│ │
+│ ┌──────────────┐ ┌──────────────────────────────────┐ │
+│ │ Telegram │────▶│ Your Bot │ │
+│ │ User │◀────│ (aiogram / python-telegram-bot) │ │
+│ └──────────────┘ └──────┬───────────────────────────┘ │
+│ │ │
+│ │ slash commands + plain text │
+│ ├───────▶ /start, /help │
+│ ├───────▶ /health, /labs │
+│ ├───────▶ intent router ──▶ LLM │
+│ │ │ │
+│ │ ▼ │
+│ ┌──────────────┐ ┌──────┴───────┐ tools/actions │
+│ │ Docker │ │ LMS Backend │◀───── GET /items │
+│ │ Compose │ │ (FastAPI) │◀───── GET /analytics │
+│ │ │ │ + PostgreSQL│◀───── POST /sync │
+│ └──────────────┘ └──────────────┘ │
 └──────────────────────────────────────────────────────────────┘
-```
 
 ## Requirements
 
@@ -91,3 +88,18 @@ By the end of this lab, you should be able to say:
 2. [Backend Integration](./lab/tasks/required/task-2.md) — P0: slash commands + real data
 3. [Intent-Based Natural Language Routing](./lab/tasks/required/task-3.md) — P1: LLM tool use
 4. [Containerize and Document](./lab/tasks/required/task-4.md) — P3: containerize + deploy
+
+## Deploy
+
+The entire application (backend, database, frontend, and Telegram bot) runs in Docker containers managed by `docker-compose`.
+
+### Prerequisites
+- Docker and Docker Compose installed on your VM.
+- A Telegram bot token from [@BotFather](https://t.me/botfather).
+- **DeepSeek API key** from [DeepSeek Platform](https://platform.deepseek.com/api_keys) (if using DeepSeek for LLM; otherwise configure your own LLM endpoint).
+
+### Environment Variables
+Copy the example environment file and edit it:
+
+```bash
+cp .env.docker.example .env.docker.secret
